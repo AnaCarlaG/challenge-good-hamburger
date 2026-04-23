@@ -1,6 +1,0 @@
-@good_hamburger_HostAddress = http://localhost:5085
-
-GET {{good_hamburger_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
