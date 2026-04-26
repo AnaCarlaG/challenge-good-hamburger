@@ -1,7 +1,7 @@
 <Solution>
-  <Project Path="Application/Application.csproj" />
-  <Project Path="Domain/Domain.csproj" />
-  <Project Path="good_hamburger/good_hamburger.csproj" />
-  <Project Path="Infrastructure/Infrastructure.csproj" />
-  <Project Path="Tests/Tests.csproj" />
+  <Project Path="Application/GoodHamburger.Application.csproj" />
+  <Project Path="Domain/GoodHamburger.Domain.csproj" />
+  <Project Path="good_hamburger/GoodHamburger.Api.csproj" />
+  <Project Path="Infrastructure/GoodHamburger.Infrastructure.csproj" />
+  <Project Path="Tests/Tests.Unit.csproj" />
 </Solution>
