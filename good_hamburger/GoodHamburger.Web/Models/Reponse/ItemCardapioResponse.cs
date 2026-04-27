@@ -1,15 +1,11 @@
-﻿using Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GoodHamburger.Web.Models.Enum;
+using System.Text.Json.Serialization;
 
-namespace Domain.Entities
+namespace GoodHamburger.Web.Models.Reponse
 {
-    public class ItemCardapio : BaseEntity
+    public class ItemCardapioResponse
     {
-        public Guid Id { get;set;  }
+        public Guid Id { get; set; }
         public TipoItem TipoItem { get; set; }
         public CategoriaItem CategoriaItem { get; set; }
         public string Nome { get; set; }

@@ -1,0 +1,128 @@
+﻿@page "/pedidos"
+@inject GoodHamburger.Web.Services.PedidoApiService Api
+@using GoodHamburger.Web.Models.Enum
+@inject NavigationManager Nav
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using GoodHamburger.Web.Models.Reponse
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h2 class="fw-bold mb-0">🧾 Pedidos</h2>
+    <a href="/pedidos/novo" class="btn btn-warning fw-bold">
+        <i class="bi bi-plus-circle"></i> Novo Pedido
+    </a>
+</div>
+
+@if (_carregando)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-warning"></div>
+    </div>
+}
+else if (!_pedidos.Any())
+{
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-inbox fs-1"></i>
+        <p class="mt-2">Nenhum pedido encontrado.</p>
+        <a href="/pedidos/novo" class="btn btn-warning">Criar primeiro pedido</a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var pedido in _pedidos)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <small class="text-muted">@pedido.Id.ToString()[..8]...</small>
+                        <span class="badge @BadgeClass(pedido.Status)">@pedido.Status</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-2">
+                            @foreach (var item in pedido.ItemPedidos)
+                            {
+                                <li class="small">• @item.Nome — R$ @item.Preco.ToString("F2")</li>
+                            }
+                        </ul>
+                        <hr />
+                        <div class="small text-muted">Subtotal: R$ @pedido.Subtotal.ToString("F2")</div>
+                        @if (pedido.Desconto > 0)
+                        {
+                            <div class="small text-success">Desconto (@pedido.PercentualDesconto%): -R$ @pedido.Desconto.ToString("F2")</div>
+                        }
+                        <div class="fw-bold">Total: R$ @pedido.Total.ToString("F2")</div>
+                    </div>
+                    <div class="card-footer d-flex gap-2 flex-wrap">
+                        <div class="card-footer d-flex gap-2 flex-wrap align-items-center">
+                            <select class="form-select form-select-sm w-auto"
+                                    @bind="_statusSelecionado[pedido.Id]">
+                                @foreach (var status in Enum.GetValues<StatusPedido>())
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </select>
+                            <button class="btn btn-sm btn-warning"
+                                    @onclick="() => AtualizarStatus(pedido.Id)">
+                                Salvar Status
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm ms-auto"
+                                    @onclick="() => Remover(pedido.Id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(_erro))
+{
+    <div class="alert alert-danger mt-3">@_erro</div>
+}
+
+@code {
+    private List<PedidoResponse> _pedidos = new();
+    private bool _carregando = true;
+    private string _erro = string.Empty;
+
+    protected override async Task OnInitializedAsync() => await Carregar();
+
+    private Dictionary<Guid, StatusPedido> _statusSelecionado = new();
+
+    private async Task Carregar()
+    {
+        _carregando = true;
+        _pedidos = await Api.ObterTodosAsync();
+        _statusSelecionado = _pedidos.ToDictionary(p => p.Id, p => p.Status);
+        _carregando = false;
+    }
+
+    private async Task AtualizarStatus(Guid id)
+    {
+        if (_statusSelecionado.TryGetValue(id, out var status))
+        {
+            await Api.AtualizarStatusAsync(id, status);
+            await Carregar();
+            StateHasChanged();
+        }
+    }
+
+    private async Task Remover(Guid id)
+    {
+        await Api.RemoverAsync(id);
+        await Carregar();
+    }
+
+    private string BadgeClass(StatusPedido status) => status switch
+    {
+        StatusPedido.Pendente => "bg-secondary",
+        StatusPedido.EmPreparacao => "bg-primary",
+        StatusPedido.Pronto => "bg-success",
+        StatusPedido.Entregue => "bg-dark",
+        StatusPedido.Cancelado => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

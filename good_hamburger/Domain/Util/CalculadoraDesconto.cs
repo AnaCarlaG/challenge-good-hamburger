@@ -14,9 +14,9 @@ namespace Domain.Util
         {
             var listaPedidos = pedidos.ToList();
 
-            var sanduiche = listaPedidos.Any(s => s.CategoriItem == CategoriItem.Hamburguer);
-            var acompanhamento = listaPedidos.Any(s => s.CategoriItem == CategoriItem.Acompanhamento);
-            var bebida = listaPedidos.Any(s => s.CategoriItem == CategoriItem.Bebida);
+            var sanduiche = listaPedidos.Any(s => s.CategoriItem == CategoriaItem.Hamburguer);
+            var acompanhamento = listaPedidos.Any(s => s.CategoriItem == CategoriaItem.Acompanhamento);
+            var bebida = listaPedidos.Any(s => s.CategoriItem == CategoriaItem.Bebida);
 
             var subTotal = listaPedidos.Sum(s => s.Preco);
 

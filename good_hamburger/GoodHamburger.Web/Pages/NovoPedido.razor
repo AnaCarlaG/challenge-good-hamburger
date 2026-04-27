@@ -1,0 +1,215 @@
+﻿@page "/pedidos/novo"
+@inject GoodHamburger.Web.Services.PedidoApiService Api
+@inject NavigationManager Nav
+@using GoodHamburger.Web.Models.Enum
+@using GoodHamburger.Web.Models.Reponse
+
+<h2 class="fw-bold mb-4">➕ Novo Pedido</h2>
+
+@if (_carregando)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-warning"></div>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        <div class="col-12 col-md-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header fw-bold bg-warning">🍔 Sanduíches</div>
+                <div class="card-body">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="sanduiche"
+                               id="nenhum"
+                               @onchange="() => LimparSanduiche()"
+                               checked="@(_sanduicheSelecionado == null)" />
+                        <label class="form-check-label text-muted" for="nenhum">
+                            Nenhum
+                        </label>
+                    </div>
+                    @foreach (var item in _cardapio.Where(i => i.CategoriaItem == CategoriaItem.Hamburguer))
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="sanduiche"
+                                   id="@item.TipoItem"
+                                   @onchange="() => SelecionarSanduiche(item.TipoItem)"
+                                   checked="@(_sanduicheSelecionado == item.TipoItem)" />
+                            <label class="form-check-label d-flex justify-content-between" for="@item.TipoItem">
+                                <span>@item.Nome</span>
+                                <strong>R$ @item.Preco.ToString("F2")</strong>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header fw-bold bg-warning">🍟 Acompanhamentos</div>
+                <div class="card-body">
+                    @foreach (var item in _cardapio.Where(i => i.CategoriaItem == CategoriaItem.Acompanhamento))
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox"
+                                   id="@item.TipoItem"
+                                   @onchange="e => ToggleItem(item.TipoItem, (bool)e.Value!)" />
+                            <label class="form-check-label d-flex justify-content-between" for="@item.TipoItem">
+                                <span>@item.Nome</span>
+                                <strong>R$ @item.Preco.ToString("F2")</strong>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header fw-bold bg-warning">🥤 Bebidas</div>
+                <div class="card-body">
+                    @foreach (var item in _cardapio.Where(i => i.CategoriaItem == CategoriaItem.Bebida))
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox"
+                                   id="@item.TipoItem"
+                                   @onchange="e => ToggleItem(item.TipoItem, (bool)e.Value!)" />
+                            <label class="form-check-label d-flex justify-content-between" for="@item.TipoItem">
+                                <span>@item.Nome</span>
+                                <strong>R$ @item.Preco.ToString("F2")</strong>
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 80px">
+                <div class="card-header fw-bold bg-dark text-white">🧾 Resumo</div>
+                <div class="card-body">
+                    @if (!_itensSelecionados.Any())
+                    {
+                        <p class="text-muted small">Nenhum item selecionado.</p>
+                    }
+                    else
+                    {
+                        <ul class="list-unstyled">
+                            @foreach (var tipo in _itensSelecionados)
+                            {
+                                var item = _cardapio.FirstOrDefault(i => i.TipoItem == tipo);
+                                <li class="d-flex justify-content-between small mb-1">
+                                    <span>@item?.Nome</span>
+                                    <span>R$ @item?.Preco.ToString("F2")</span>
+                                </li>
+                            }
+                        </ul>
+                        <hr />
+                        <div class="small text-muted">Subtotal: R$ @Subtotal().ToString("F2")</div>
+                        @if (PercentualDesconto() > 0)
+                        {
+                            <div class="small text-success">Desconto (@PercentualDesconto()%): -R$ @ValorDesconto().ToString("F2")</div>
+                        }
+                        <div class="fw-bold fs-5">Total: R$ @Total().ToString("F2")</div>
+                    }
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <button class="btn btn-warning fw-bold w-100"
+                            @onclick="Criar"
+                            disabled="@(!_itensSelecionados.Any() || _enviando)">
+                        @if (_enviando)
+                        {
+                            <span class="spinner-border spinner-border-sm"></span>
+                        }
+                        else
+                        {
+                            <span>Confirmar Pedido</span>
+                        }
+                    </button>
+                    <a href="/pedidos" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(_erro))
+{
+    <div class="alert alert-danger mt-3">@_erro</div>
+}
+
+@code {
+    private List<ItemCardapioResponse> _cardapio = new();
+    private List<TipoItem> _itensSelecionados = new();
+    private TipoItem? _sanduicheSelecionado;
+    private bool _carregando = true;
+    private bool _enviando = false;
+    private string _erro = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _cardapio = await Api.ObterCardapioAsync();
+        _carregando = false;
+    }
+
+    private void LimparSanduiche()
+    {
+        if (_sanduicheSelecionado.HasValue)
+            _itensSelecionados.Remove(_sanduicheSelecionado.Value);
+        _sanduicheSelecionado = null;
+    }
+
+    private void SelecionarSanduiche(TipoItem tipo)
+    {
+        if (_sanduicheSelecionado.HasValue)
+            _itensSelecionados.Remove(_sanduicheSelecionado.Value);
+        _sanduicheSelecionado = tipo;
+        _itensSelecionados.Add(tipo);
+    }
+
+    private void ToggleItem(TipoItem tipo, bool adicionar)
+    {
+        if (adicionar) _itensSelecionados.Add(tipo);
+        else _itensSelecionados.Remove(tipo);
+    }
+
+    private decimal Subtotal() =>
+        _itensSelecionados.Sum(t => _cardapio.FirstOrDefault(i => i.TipoItem == t)?.Preco ?? 0);
+
+    private decimal PercentualDesconto()
+    {
+        var temSanduiche = _itensSelecionados.Any(t => _cardapio.Any(i => i.TipoItem == t && i.CategoriaItem == CategoriaItem.Hamburguer));
+        var temAcomp = _itensSelecionados.Any(t => _cardapio.Any(i => i.TipoItem == t && i.CategoriaItem == CategoriaItem.Acompanhamento));
+        var temBebida = _itensSelecionados.Any(t => _cardapio.Any(i => i.TipoItem == t && i.CategoriaItem == CategoriaItem.Bebida));
+
+        return (temSanduiche, temAcomp, temBebida) switch
+        {
+            (true, true, true) => 20m,
+            (true, false, true) => 15m,
+            (true, true, false) => 10m,
+            _ => 0m
+        };
+    }
+
+    private decimal ValorDesconto() => Subtotal() * (PercentualDesconto() / 100);
+    private decimal Total() => Subtotal() - ValorDesconto();
+
+    private async Task Criar()
+    {
+        _erro = string.Empty;
+        _enviando = true;
+        try
+        {
+            var pedido = await Api.CriarAsync(_itensSelecionados);
+            if (pedido is not null)
+                Nav.NavigateTo("/pedidos");
+            else
+                _erro = "Erro ao criar o pedido. Tente novamente.";
+        }
+        catch (Exception ex)
+        {
+            _erro = ex.Message;
+        }
+        finally
+        {
+            _enviando = false;
+        }
+    }
+}

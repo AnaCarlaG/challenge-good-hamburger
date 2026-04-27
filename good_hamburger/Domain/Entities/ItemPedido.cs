@@ -12,7 +12,7 @@ namespace Domain.Entities
         public Guid PedidoId { get; set; }
         public Pedido Pedido { get; set; }
         public TipoItem TipoItem { get; set; }
-        public CategoriItem CategoriItem { get; set; }
+        public CategoriaItem CategoriItem { get; set; }
         public string Nome { get; set; }
         public decimal Preco { get; set; }
     }

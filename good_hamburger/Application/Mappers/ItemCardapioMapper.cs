@@ -15,7 +15,7 @@ namespace Application.Mappers
         {
             Id = item.Id,
             TipoItem = item.TipoItem,
-            CategoriItem = item.CategoriItem,
+            CategoriaItem = item.CategoriaItem,
             Nome = item.Nome,
             Preco = item.Preco,
             Ativo = item.Ativo,

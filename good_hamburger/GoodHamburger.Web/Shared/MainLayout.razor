@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-dark" href="/">
+            🍔 Good Hamburger
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark fw-semibold" href="/" Match="NavLinkMatch.All">
+                        <i class="bi bi-house"></i> Início
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark fw-semibold" href="/pedidos">
+                        <i class="bi bi-list-ul"></i> Pedidos
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark fw-semibold" href="/cardapio">
+                        <i class="bi bi-journal-text"></i> Cardápio
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-4">
+    @Body
+</div>

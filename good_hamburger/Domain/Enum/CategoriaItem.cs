@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enum
 {
-    public enum CategoriItem
+    public enum CategoriaItem
     {
         Hamburguer,
         Acompanhamento,

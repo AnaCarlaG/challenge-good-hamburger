@@ -7,7 +7,7 @@ namespace Tests.Unit
 {
     public class CalculadoraDescontoTests
     {
-        private static ItemPedido CriarPedido(TipoItem tipoItem, CategoriItem categoriItem, decimal preco) => new()
+        private static ItemPedido CriarPedido(TipoItem tipoItem, CategoriaItem categoriItem, decimal preco) => new()
         {
             CategoriItem = categoriItem,
             TipoItem = tipoItem,
@@ -16,11 +16,11 @@ namespace Tests.Unit
             CreatedAt = DateTime.Now
         };
 
-        private static readonly ItemPedido XBurger = CriarPedido(TipoItem.XBurger, CategoriItem.Hamburguer, 5.00m);
-        private static readonly ItemPedido XEgg = CriarPedido(TipoItem.XEgg, CategoriItem.Hamburguer, 4.50m);
-        private static readonly ItemPedido XBacon = CriarPedido(TipoItem.XBacon, CategoriItem.Hamburguer, 7.00m);
-        private static readonly ItemPedido BatataFrita = CriarPedido(TipoItem.BatatFrita, CategoriItem.Acompanhamento, 2.00m);
-        private static readonly ItemPedido Refrigerante = CriarPedido(TipoItem.Refrigerante, CategoriItem.Bebida, 2.50m);
+        private static readonly ItemPedido XBurger = CriarPedido(TipoItem.XBurger, CategoriaItem.Hamburguer, 5.00m);
+        private static readonly ItemPedido XEgg = CriarPedido(TipoItem.XEgg, CategoriaItem.Hamburguer, 4.50m);
+        private static readonly ItemPedido XBacon = CriarPedido(TipoItem.XBacon, CategoriaItem.Hamburguer, 7.00m);
+        private static readonly ItemPedido BatataFrita = CriarPedido(TipoItem.BatatFrita, CategoriaItem.Acompanhamento, 2.00m);
+        private static readonly ItemPedido Refrigerante = CriarPedido(TipoItem.Refrigerante, CategoriaItem.Bebida, 2.50m);
 
         [Fact]
         public void Calcular_SanduicheSozinho_SemDesconto() 

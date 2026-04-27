@@ -22,21 +22,21 @@ namespace Tests.Unit
         }
 
         // ─── helpers ───────────────────────────────────────────────
-        private static ItemCardapio MakeCardapio(TipoItem tipo, CategoriItem categoriItem, decimal preco) => new()
+        private static ItemCardapio MakeCardapio(TipoItem tipo, CategoriaItem categoriItem, decimal preco) => new()
         {
             TipoItem = tipo,
-            CategoriItem = categoriItem,
+            CategoriaItem = categoriItem,
             Preco = preco,
             Nome = tipo.ToString()
         };
 
         private void SetupCardapio()
         {
-            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.XBurger)).ReturnsAsync(MakeCardapio(TipoItem.XBurger, CategoriItem.Hamburguer, 5.00m));
-            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.XEgg)).ReturnsAsync(MakeCardapio(TipoItem.XEgg, CategoriItem.Hamburguer, 4.50m));
-            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.XBacon)).ReturnsAsync(MakeCardapio(TipoItem.XBacon, CategoriItem.Hamburguer, 7.00m));
-            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.BatatFrita)).ReturnsAsync(MakeCardapio(TipoItem.BatatFrita, CategoriItem.Acompanhamento, 2.00m));
-            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.Refrigerante)).ReturnsAsync(MakeCardapio(TipoItem.Refrigerante, CategoriItem.Bebida, 2.50m));
+            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.XBurger)).ReturnsAsync(MakeCardapio(TipoItem.XBurger, CategoriaItem.Hamburguer, 5.00m));
+            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.XEgg)).ReturnsAsync(MakeCardapio(TipoItem.XEgg, CategoriaItem.Hamburguer, 4.50m));
+            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.XBacon)).ReturnsAsync(MakeCardapio(TipoItem.XBacon, CategoriaItem.Hamburguer, 7.00m));
+            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.BatatFrita)).ReturnsAsync(MakeCardapio(TipoItem.BatatFrita, CategoriaItem.Acompanhamento, 2.00m));
+            _itemCardapioRepository.Setup(r => r.ObterPorTipoAsync(TipoItem.Refrigerante)).ReturnsAsync(MakeCardapio(TipoItem.Refrigerante, CategoriaItem.Bebida, 2.50m));
         }
 
         private static Pedido MakePedido(Guid? id = null, StatusPedido status = StatusPedido.Pendente) => new()

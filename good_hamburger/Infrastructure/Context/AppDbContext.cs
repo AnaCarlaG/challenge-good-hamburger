@@ -52,7 +52,7 @@ namespace Infrastructure.Context
                         Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                         Preco = 5.00m,
                         TipoItem = TipoItem.XBurger,
-                        CategoriItem = CategoriItem.Hamburguer,
+                        CategoriaItem = CategoriaItem.Hamburguer,
                         Nome = "X Burger",
                         Ativo = true,
                         CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -62,7 +62,7 @@ namespace Infrastructure.Context
                          Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                          Preco = 4.50m,
                          TipoItem = TipoItem.XEgg,
-                         CategoriItem = CategoriItem.Hamburguer,
+                         CategoriaItem = CategoriaItem.Hamburguer,
                          Nome = "X Egg",
                          Ativo = true,
                          CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -72,7 +72,7 @@ namespace Infrastructure.Context
                           Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                           Preco = 7.00m,
                           TipoItem = TipoItem.XBacon,
-                          CategoriItem = CategoriItem.Hamburguer,
+                          CategoriaItem = CategoriaItem.Hamburguer,
                           Nome = "X Bacon",
                           Ativo = true,
                           CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -82,7 +82,7 @@ namespace Infrastructure.Context
                           Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                           Preco = 2.00m,
                           TipoItem = TipoItem.BatatFrita,
-                          CategoriItem = CategoriItem.Acompanhamento,
+                          CategoriaItem = CategoriaItem.Acompanhamento,
                           Nome = "Batata frita",
                           Ativo = true,
                           CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -92,7 +92,7 @@ namespace Infrastructure.Context
                           Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
                           Preco = 2.50m,
                           TipoItem = TipoItem.Refrigerante,
-                          CategoriItem = CategoriItem.Bebida,
+                          CategoriaItem = CategoriaItem.Bebida,
                           Nome = "Refrigerante",
                           Ativo = true,
                           CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc)

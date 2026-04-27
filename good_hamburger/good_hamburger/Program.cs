@@ -14,11 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Repositories
-builder.Services.AddScoped<IPedidoRepository,PedidoRepository>();
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IItemCardapioRepository, ItemCardapioRepository>();
 //Services
 builder.Services.AddScoped<IPedidoService, PedidoService>();
-builder.Services.AddScoped<IItemCardapioService,ItemCardapioService>();
+builder.Services.AddScoped<IItemCardapioService, ItemCardapioService>();
 
 builder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -31,24 +31,37 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:7143", "http://localhost:5223")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors("BlazorPolicy");
 
 // Middleware de erros
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
     {
-    var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-    var (statusCode, message) = exception switch
-    {
-        NotFoundException ex => (StatusCodes.Status404NotFound, ex.Message),
-        PedidoInvalidoException ex => (StatusCodes.Status422UnprocessableEntity, ex.Message),
-        _ => (StatusCodes.Status500InternalServerError, "Ocorreu um erro interno.")
-    };
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        var (statusCode, message) = exception switch
+        {
+            NotFoundException ex => (StatusCodes.Status404NotFound, ex.Message),
+            PedidoInvalidoException ex => (StatusCodes.Status422UnprocessableEntity, ex.Message),
+            _ => (StatusCodes.Status500InternalServerError, "Ocorreu um erro interno.")
+        };
         context.Response.StatusCode = statusCode;
         context.Response.ContentType = "application/json";
 
-        await context.Response.WriteAsJsonAsync( new { 
+        await context.Response.WriteAsJsonAsync(new
+        {
             status = statusCode,
             message
         });

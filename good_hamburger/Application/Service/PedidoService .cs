@@ -153,7 +153,7 @@ namespace Application.Service
                 itensPedido.Add(new ItemPedido
                 {
                     TipoItem = itemCardapio.TipoItem,
-                    CategoriItem = itemCardapio.CategoriItem,
+                    CategoriItem = itemCardapio.CategoriaItem,
                     Nome = itemCardapio.Nome,
                     Preco = itemCardapio.Preco,
                     CreatedAt = DateTime.UtcNow

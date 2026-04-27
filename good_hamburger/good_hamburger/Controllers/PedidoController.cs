@@ -56,7 +56,7 @@ namespace good_hamburger.Controllers
             return Ok(pedido);
         }
         [HttpPatch("{id:guid}/status")]
-        public async Task<IActionResult> AtualizarStatus (Guid id, AtualizarStatusRequest request)
+        public async Task<IActionResult> AtualizarStatus (Guid id, [FromBody] AtualizarStatusRequest request)
         {
             var pedido = await _pedidoService.AtualizarStatusAsync(id, request.Status);
             return Ok(pedido);
