@@ -53,5 +53,18 @@ namespace GoodHamburger.Web.Services
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<ItemCardapioResponse>>(content,_serializerOptions);
         }
+        public async Task<PedidoResponse?> AcrescentarAsync(Guid id, IEnumerable<TipoItem> itens)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/pedido/{id}/acrescentar", new { Itens = itens });
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<PedidoResponse>(content, _serializerOptions);
+        }
+
+        public async Task<PedidoResponse?> AtualizarAsync(Guid id, IEnumerable<TipoItem> itens)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/pedido/{id}", new { Itens = itens });
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<PedidoResponse>(content, _serializerOptions);
+        }
     }
 }

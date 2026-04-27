@@ -49,7 +49,7 @@ namespace good_hamburger.Controllers
             var pedido = await _pedidoService.AcrescentarPedidoAsync(id, request.Itens);
             return Ok(pedido);
         }
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> AtualizarAsync(Guid id, [FromBody] AtualizarPedidoRequest request)
         {
             var pedido = await _pedidoService.AtualizarAsync(id, request.Itens);

@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Domain\GoodHamburger.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interface\" />
-  </ItemGroup>
-
 </Project>
